@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".gui.AddContactActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="106dp"
+        android:layout_height="122dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_action_avatar" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="184dp"
+        android:layout_height="64dp"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_width="181dp"
+        android:layout_height="58dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="ContactName"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        tools:layout_editor_absoluteY="1dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="123dp"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:text="@string/name"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.368"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="123dp"
+        android:layout_height="52dp"
+        android:gravity="center"
+        android:text="@string/mac"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/macAdressView2"
+        android:layout_width="181dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/editText4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

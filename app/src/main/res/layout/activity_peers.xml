@@ -4,27 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gui.MainActivity">
-
-
+    tools:context=".gui.PeersActivity">
 
     <ListView
-        android:id="@+id/listviewID"
+        android:id="@+id/peersListViewID"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/container"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="104dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:checked="false"
+        android:text="@string/search_switch"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:theme="@style/SCBSwitch"
+        app:layout_constraintBottom_toBottomOf="@+id/peersListViewID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="49dp"
+        android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintStart_toStartOf="parent">
         <!-- Main content -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"

@@ -8,4 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/colorSecond</item>
+
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/colorSecond
+        </item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/colorSecond
+        </item>
+    </style>
+
 </resources>

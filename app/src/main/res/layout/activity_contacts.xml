@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gui.MainActivity">
-
-
+    tools:context=".gui.ContactsActivity">
 
     <ListView
-        android:id="@+id/listviewID"
+        android:id="@+id/contactsListviewID"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/container"
