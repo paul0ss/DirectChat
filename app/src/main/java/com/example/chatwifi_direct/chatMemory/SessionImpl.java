@@ -6,8 +6,8 @@ public class SessionImpl implements Session{
 
     @Override
     public void restore() {
-        allContacts = new Contacts();
-        allChats = new Chats();
+        //allContacts = new Contacts();
+        //allChats = new Chats();
     }
 
     @Override

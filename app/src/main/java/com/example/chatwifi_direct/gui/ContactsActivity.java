@@ -11,20 +11,13 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.example.chatwifi_direct.R;
+import com.example.chatwifi_direct.chatMemory.Contact;
+import com.example.chatwifi_direct.chatMemory.Contacts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ContactsActivity extends AppCompatActivity {
-    String[] nameArray = {"Cristina","Aaron","Nikita"};
-
-    String[] macArray = {
-            "<43:f2:e3:ab:76:fa>",
-            "<98:c4:d6:ca:81:44>",
-            "<13:37:ae:6d:5d:c1>",
-    };
-
-    Integer[] pictures = {R.drawable.ic_action_avatar,R.drawable.ic_action_avatar,R.drawable.ic_action_avatar};
     ListView listView;
-
+    Contacts contacts;
     BottomNavigationView bottomNavigation;
 
     @Override
@@ -58,7 +51,8 @@ public class ContactsActivity extends AppCompatActivity {
             }
         });
 
-        ContactsListAdapter adapter = new ContactsListAdapter(this, nameArray, macArray, pictures);
+        contacts = Contacts.getContacsInstance(MainActivity.obj);
+        ContactsListAdapter adapter = new ContactsListAdapter(this, contacts.getNames(), contacts.getMacs(), contacts.getImage());
         listView = (ListView) findViewById(R.id.contactsListviewID);
         listView.setAdapter(adapter);
     }

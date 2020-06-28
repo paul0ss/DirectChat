@@ -10,21 +10,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.chatwifi_direct.R;
+import com.example.chatwifi_direct.chatMemory.Chats;
+import com.example.chatwifi_direct.chatMemory.Contacts;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
-    String[] participents = {"Cristina", "Nikita", "Aaron"};
-    String[] lastMessages = {"ich liebe dich;*", "Banger", "lass saufen!"};
+    String[] participents = null;
+    String[] lastMessages = null;
     Integer[] pictures = {R.drawable.ic_action_avatar,R.drawable.ic_action_avatar,R.drawable.ic_action_avatar};
+    Integer picture = R.drawable.ic_action_avatar;
     ListView listView;
+    public static MainActivity obj;
+    Contacts contacts;
+    Chats chats;
+    public static int restoreTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        obj = this;
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
@@ -53,19 +64,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        CustomListAdapter adapter = new CustomListAdapter(this, participents, lastMessages, pictures);
-        listView = (ListView) findViewById(R.id.listviewID);
-        listView.setAdapter(adapter);
+        contacts = Contacts.getContacsInstance(this);
+        chats = Chats.getInstance(this);
+        if(restoreTime == 0){
+            contacts.restore();
+            chats.restore();
+            restoreTime++;
+        }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, DisplayMessageActivity.class);
-                //String message = nameArray[position];
-                //intent.putExtra("animal", message);
-                startActivity(intent);
-            }
-        });
+        participents = chats.getParticipents();
+        lastMessages = chats.getLastMessage();
+        System.out.println("--------------------------------------------");
+        if(participents.length != 0){
+            System.out.println("--------------------------------------------");
+            System.out.println(participents[0]);
+        }
+        if(participents.length != 0 &&  lastMessages.length != 0) {
+            CustomListAdapter adapter = new CustomListAdapter(this, participents, lastMessages, picture);
+            listView = (ListView) findViewById(R.id.listviewID);
+            listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    TextView textView = (TextView) view.findViewById(R.id.chatTextViewID);
+                    String clicked = textView.getText().toString();
+                    String[] members = clicked.replaceAll("^[.,\\s]+", "").split("[.,\\s]+");
+                    Intent intent = new Intent(MainActivity.this, DisplayMessageActivity.class);
+                    //String message = nameArray[position];
+                    intent.putExtra("members", members);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
 /*    @Override

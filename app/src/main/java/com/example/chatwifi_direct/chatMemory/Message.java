@@ -9,4 +9,16 @@ public class Message {
         this.sender = sender;
         this.text = text;
     }
+
+    public String getSender(){
+        return sender;
+    }
+
+    public String getText(){
+        return text;
+    }
+
+    public String toString(){
+        return sender + ": " + text;
+    }
 }

@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 
 import com.example.chatwifi_direct.R;
+import com.example.chatwifi_direct.chatMemory.Chat;
 import com.example.chatwifi_direct.networkController.WifiDirectBroadcastReceiver;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -126,20 +127,22 @@ public class PeersActivity extends AppCompatActivity {
         ArrayList<String> checkedMacs = adapter.getCheckedMacs();
         ArrayList<String> checkedNames = adapter.getCheckedNames();
         switch(item.getItemId()){
-            case R.id.item1:
-                Intent intent = new Intent(PeersActivity.this, DisplayMessageActivity.class);
-                startActivity(intent);
+            case R.id.item1://Chat
+                if(!checkedNames.isEmpty()){
+                    Intent intent = new Intent(PeersActivity.this, DisplayMessageActivity.class);
+                    intent.putExtra("members", checkedNames.toArray(new String[0]));
+                    startActivity(intent);
+                }
                 break;
-            case R.id.item2:
+            case R.id.item2://add Contact
                 Intent intent2 = new Intent(PeersActivity.this, AddContactActivity.class);
                 if(checkedMacs.isEmpty() || checkedNames.isEmpty()){
-                    intent2.putExtra("mac", ""); //Optional parameters
-                    intent2.putExtra("name", "Empty");
+                 // wenn nichts ausgewählt wurde: tu nichts
                 }else {
                     intent2.putExtra("mac", checkedMacs.get(checkedMacs.size() - 1)); //Optional parameters
-                    intent2.putExtra("name", checkedNames.get(checkedMacs.size() - 1));
+                    intent2.putExtra("name", checkedNames.get(checkedNames.size() - 1));
+                    startActivity(intent2);
                 }
-                startActivity(intent2);
                 break;
         }
         return super.onOptionsItemSelected(item);

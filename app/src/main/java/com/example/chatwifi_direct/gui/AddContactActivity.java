@@ -12,13 +12,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chatwifi_direct.R;
+import com.example.chatwifi_direct.chatMemory.Contact;
+import com.example.chatwifi_direct.chatMemory.Contacts;
+import com.example.chatwifi_direct.chatMemory.MemoryManagement;
 
 public class AddContactActivity extends AppCompatActivity {
     Button save;
     ImageView picture;
     EditText nameView;
     TextView macView;
+    String mac;
     String name;
+    MemoryManagement<Contact> memory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +36,7 @@ public class AddContactActivity extends AppCompatActivity {
         macView = findViewById(R.id.macAdressView2);
 
         Intent intent = getIntent();
-        String mac = intent.getStringExtra("mac");
+        mac = intent.getStringExtra("mac");
         name = intent.getStringExtra("name");
         nameView.setText(name);
         macView.setText(mac);
@@ -40,6 +45,10 @@ public class AddContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 name = nameView.getText().toString().trim();
+                memory = Contacts.getContacsInstance(MainActivity.obj);
+                //memory = new Contacts(AddContactActivity.this);
+                Contact c = new Contact(name, mac);
+                memory.save(c);
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Contact "+name+ " saved!",
                         Toast.LENGTH_SHORT);
