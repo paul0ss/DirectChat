@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.Switch;
 
 import com.example.chatwifi_direct.R;
-import com.example.chatwifi_direct.chatMemory.Chat;
 import com.example.chatwifi_direct.networkController.WifiDirectBroadcastReceiver;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

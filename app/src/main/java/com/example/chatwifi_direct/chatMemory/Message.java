@@ -1,20 +1,20 @@
 package com.example.chatwifi_direct.chatMemory;
 
-public class Message {
-    String sender;
-    String text;
+class Message {
+    private String sender;
+    private String text;
 
     //Die Nachricht besteht aus dem Namen der Absender und der Inhalt der Nachricht
-    public Message(String sender, String text){
+    Message(String sender, String text){
         this.sender = sender;
         this.text = text;
     }
 
-    public String getSender(){
+    String getSender(){
         return sender;
     }
 
-    public String getText(){
+    String getText(){
         return text;
     }
 

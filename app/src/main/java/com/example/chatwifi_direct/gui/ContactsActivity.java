@@ -7,12 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 
 import com.example.chatwifi_direct.R;
-import com.example.chatwifi_direct.chatMemory.Contact;
 import com.example.chatwifi_direct.chatMemory.Contacts;
+import com.example.chatwifi_direct.chatMemory.ContactsImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ContactsActivity extends AppCompatActivity {
@@ -51,8 +50,8 @@ public class ContactsActivity extends AppCompatActivity {
             }
         });
 
-        contacts = Contacts.getContacsInstance(MainActivity.obj);
-        ContactsListAdapter adapter = new ContactsListAdapter(this, contacts.getNames(), contacts.getMacs(), contacts.getImage());
+        contacts = ContactsImpl.getContacsInstance(MainActivity.obj);
+        ContactsListAdapter adapter = new ContactsListAdapter(this, contacts.getNames(), contacts.getMacs(), contacts.getPictures());
         listView = (ListView) findViewById(R.id.contactsListviewID);
         listView.setAdapter(adapter);
     }

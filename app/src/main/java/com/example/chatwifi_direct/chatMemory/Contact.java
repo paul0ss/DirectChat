@@ -1,8 +1,11 @@
 package com.example.chatwifi_direct.chatMemory;
 
-public class Contact {
+import com.example.chatwifi_direct.R;
+
+class Contact {
     private String name;
     private String mac;
+    private Integer picture = R.drawable.ic_action_avatar;
 
     //ein Kontakt besteht aus dem Namen und der MAC-Adresse seines Handys
     public Contact(String name, String mac){
@@ -10,11 +13,15 @@ public class Contact {
         this.mac = mac;
     }
 
-    public String getName(){
+    protected String getName(){
         return this.name;
     }
 
-    public String getMac(){ return this.mac; }
+    protected String getMac(){ return this.mac; }
+
+    protected Integer getPicture() {
+        return picture;
+    }
 
     public String toString(){
         return name + "-" + mac + "\n";

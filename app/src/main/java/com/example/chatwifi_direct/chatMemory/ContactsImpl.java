@@ -7,34 +7,43 @@ import com.example.chatwifi_direct.R;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Contacts implements MemoryManagement<Contact>{
-    HashMap<Integer, Contact> contactsList = new HashMap<>(); //Map mit IDs und dazugehöriger Kontaktperson
-    int maxID = 0; //die ID vom zuletzt abgespeicherter Kontaktperson
+public class ContactsImpl implements Contacts{
+    //HashMap<Integer, Contact> contactsList = new HashMap<>(); //Map mit IDs und dazugehöriger Kontaktperson
+    HashMap<String, Contact> contactsList = new HashMap<>();
+    //TODO: HERE
+    // int maxID = 0; //die ID vom zuletzt abgespeicherter Kontaktperson
     File contactFile;
     private static final String FILENAME = "contactsFile.txt";
-    Integer imageID = R.drawable.ic_action_avatar;
+    //Integer imageID = R.drawable.ic_action_avatar;
     private static Context ctx;
-    private static Contacts instance;
+    private static ContactsImpl instance;
 
-    private String createFileName(int id, String contactname){
+/*    private String createFileName(int id, String contactname){
         return id + "." + contactname;
+    }*/
+
+    private ContactsImpl(){
+        restore();
     }
 
-    private Contacts(){
-    }
-
-    public static Contacts getContacsInstance(Context context){
-        if(Contacts.instance == null){
-            Contacts.instance = new Contacts();
+    public void setUpContact(String mac){
+        if(contactsList.get(mac) == null){
+            Contact c = new Contact("Empty", "mac");
+            contactsList.put(mac,c);
         }
-        Contacts.ctx = context;
+    }
+
+    public static ContactsImpl getContacsInstance(Context context){
+        ContactsImpl.ctx = context;
+        if(ContactsImpl.instance == null){
+            ContactsImpl.instance = new ContactsImpl();
+        }
         return instance;
     }
 
@@ -42,10 +51,11 @@ public class Contacts implements MemoryManagement<Contact>{
         //Contact c = contactsList.get(0);
         //TODO: MAMAYBE ERROR!!!
         //Contact[] c = (Contact[]) contactsList.values().toArray();
-        Contact[] c = contactsList.values().toArray(new Contact[contactsList.size()]);
+        Contact[] c = contactsList.values().toArray(new Contact[0]);
         return c;
     }
 
+    @Override
     public String[] getNames(){
         Contact[] contactsArray = this.getContactsArray();
         String[] names = new String[contactsArray.length];
@@ -57,6 +67,7 @@ public class Contacts implements MemoryManagement<Contact>{
         return names;
     }
 
+    @Override
     public String[] getMacs(){
         Contact[] macsArray = this.getContactsArray();
         String[] macs = new String[macsArray.length];
@@ -68,12 +79,23 @@ public class Contacts implements MemoryManagement<Contact>{
         return macs;
     }
 
-    public Integer getImage(){
-        return imageID;
+    @Override
+    public Integer getPicture(String mac){
+        return contactsList.get(mac).getPicture();
     }
 
-    public void restore(){
-        int id = maxID;
+    @Override
+    public Integer[] getPictures(){
+        ArrayList<Integer> list = new ArrayList<>();
+        for(Contact c : contactsList.values()){
+            list.add(c.getPicture());
+        }
+        return list.toArray(new Integer[0]);
+    }
+
+    private void restore(){
+        //TODO: HERE!!!
+        //int id = maxID;
         contactFile = new File(ctx.getFilesDir(), FILENAME);
         FileInputStream fis = null;
         try {
@@ -87,8 +109,9 @@ public class Contacts implements MemoryManagement<Contact>{
                 String mac;
                 name = contactParts[0];
                 mac = contactParts[1].trim();
-                contactsList.put(maxID, new Contact(name, mac));
-                maxID++;
+                contactsList.put(mac, new Contact(name, mac));
+                //TODO: HERE!!!
+                //maxID++;
                 //contactsList.put(id, new Contact(contactString, "fwieuf"));
             }
         } catch (IOException e) {
@@ -102,15 +125,17 @@ public class Contacts implements MemoryManagement<Contact>{
                 }
             }
         }
-        //TODO: holt alle Daten aus dem Ordner Contacts ins contactList
-        //TODO: setztn maxID
     }
 
     @Override
-    public void save(Contact contact) {
+    public void save(String name,  String mac) { //TODO: die vorhandene Kontakte werden in dem File nicht überschrieben
         //int id = maxID++;
-        maxID = maxID + 1;
-        contactsList.put(maxID, contact);
+        Contact contact = new Contact(name, mac);
+        //TODO HERE!!!
+        //maxID = maxID + 1;
+        //TODO: HERE!!!
+        //contactsList.put(maxID, contact);
+        contactsList.put(mac, contact);
         contactFile = new File(ctx.getFilesDir(), FILENAME);
         FileOutputStream fos = null;
         try {
@@ -132,8 +157,8 @@ public class Contacts implements MemoryManagement<Contact>{
     }
 
     @Override
-    public void delete(Contact contact) {
-        contactsList.remove(contact);
+    public void delete(String mac) {
+        contactsList.remove(mac);
         //TODO: löscht die geeignete Datei aus dem Datessystem
     }
 }

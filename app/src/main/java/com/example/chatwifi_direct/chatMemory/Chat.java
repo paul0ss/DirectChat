@@ -13,16 +13,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Chat implements MemoryManagement<Message>{
-    File chatLog;
-    //String[] members;
-    Set<String> members = null;
-    Integer imageID = R.drawable.ic_action_avatar;
-    ArrayList<Message> messages = new ArrayList<>();
-    Context context;
+class Chat{
+    private File chatLog;
+    private Set<String> members = null;
+    private Integer imageID = R.drawable.ic_action_avatar;
+    private ArrayList<Message> messages = new ArrayList<>();
+    private Context context;
 
     //erstellt einen eindeutigen Namen für den File, wo das Chatlog abgespeichert wird
-    public String createFilename(Set<String> members){
+    private String createFilename(Set<String> members){
         String[] m = members.toArray(new String[0]);
         String name = "";
         for(int i = 0; i < m.length; i++){
@@ -34,27 +33,32 @@ public class Chat implements MemoryManagement<Message>{
         return name = name + "@Chat" + ".txt";
     }
 
-    public void addMessage(Message msg){
+/*    public void addMessage(Message msg){
         messages.add(msg);
-    }
+    }*/
 
-    public ArrayList<String> getMessages(){
+/*    public ArrayList<String> getMessages(){
         ArrayList<String> messages = new ArrayList<>();
         for(Message m : this.messages){
             messages.add(m.getText());
         }
         return messages;
+    }*/
+
+    protected ArrayList<Message> getMessages(){
+        return this.messages;
     }
 
-    public ArrayList<String> getSenders(){
+
+/*    public ArrayList<String> getSenders(){
         ArrayList<String> senders = new ArrayList<>();
         for(Message m : this.messages){
             senders.add(m.getSender());
         }
         return senders;
-    }
+    }*/
 
-    public String getLastMessage(){
+    protected String getLastMessage(){
         if(messages.size() == 0){
             return "";
         }else{
@@ -62,7 +66,7 @@ public class Chat implements MemoryManagement<Message>{
         }
     }
 
-    private void writeMembersToFile(File file, Set<String> members){
+/*    private void writeMembersToFile(File file, Set<String> members){
         String str = "Chatmembers: ";
         for(String s : members){
             str = str + s + " ";
@@ -84,32 +88,21 @@ public class Chat implements MemoryManagement<Message>{
             }
         }
 
-    }
+    }*/
 
-    public Integer getImage(){
+    protected Integer getImage(){
         return imageID;
     }
 
     //Ein Chat wird mit Hilfe von den Teilnehmern eindeutig identifiziert
-    public Chat(Context context, Set<String> members){
+    protected Chat(Context context, Set<String> members){
         this.members = members;
-        //this.members = members;
         this.context = context;
         chatLog = new File(context.getFilesDir(), createFilename(members));
-        //TODO: wenn File leer, schreib die Teilnehmer rein
-        if(chatLog.length() == 0){
-            //writeMembersToFile(chatLog, members);
-        }
-        //TODO: save Chat to File
-    }
-
-    public void restore(){
-
     }
 
 
-    @Override
-    public void save(Message message) {
+    protected void save(Message message) {
         messages.add(message);
         String messageUnit = message.toString() + "\n";
         FileOutputStream fos = null;
@@ -130,8 +123,8 @@ public class Chat implements MemoryManagement<Message>{
         }
     }
 
-    @Override
-    public void delete(Message message) {
+
+    protected void delete(Message message) {
         messages.remove(message);
         //TODO: delete message from file chatLog
     }

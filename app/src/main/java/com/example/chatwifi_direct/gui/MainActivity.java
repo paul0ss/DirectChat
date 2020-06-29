@@ -14,22 +14,18 @@ import android.widget.TextView;
 
 import com.example.chatwifi_direct.R;
 import com.example.chatwifi_direct.chatMemory.Chats;
-import com.example.chatwifi_direct.chatMemory.Contacts;
+import com.example.chatwifi_direct.chatMemory.ChatsImpl;
+import com.example.chatwifi_direct.chatMemory.ContactsImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     String[] participents = null;
     String[] lastMessages = null;
-    Integer[] pictures = {R.drawable.ic_action_avatar,R.drawable.ic_action_avatar,R.drawable.ic_action_avatar};
-    Integer picture = R.drawable.ic_action_avatar;
     ListView listView;
     public static MainActivity obj;
-    Contacts contacts;
+    ContactsImpl contacts;
     Chats chats;
-    public static int restoreTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,23 +60,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        contacts = Contacts.getContacsInstance(this);
-        chats = Chats.getInstance(this);
-        if(restoreTime == 0){
+        contacts = ContactsImpl.getContacsInstance(this);
+        chats = ChatsImpl.getInstance(this);
+/*        if(restoreTime == 0){
             contacts.restore();
             chats.restore();
             restoreTime++;
-        }
-
+        }*/
         participents = chats.getParticipents();
-        lastMessages = chats.getLastMessage();
-        System.out.println("--------------------------------------------");
+        lastMessages = chats.getLastMessages();
+
+/*        System.out.println("--------------------------------------------");
         if(participents.length != 0){
             System.out.println("--------------------------------------------");
             System.out.println(participents[0]);
-        }
+        }*/
         if(participents.length != 0 &&  lastMessages.length != 0) {
-            CustomListAdapter adapter = new CustomListAdapter(this, participents, lastMessages, picture);
+            CustomListAdapter adapter = new CustomListAdapter(this, participents, lastMessages, chats.getPictures());
             listView = (ListView) findViewById(R.id.listviewID);
             listView.setAdapter(adapter);
 
@@ -90,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
                     TextView textView = (TextView) view.findViewById(R.id.chatTextViewID);
                     String clicked = textView.getText().toString();
                     String[] members = clicked.replaceAll("^[.,\\s]+", "").split("[.,\\s]+");
+
                     Intent intent = new Intent(MainActivity.this, DisplayMessageActivity.class);
-                    //String message = nameArray[position];
                     intent.putExtra("members", members);
                     startActivity(intent);
                 }

@@ -12,9 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chatwifi_direct.R;
-import com.example.chatwifi_direct.chatMemory.Contact;
 import com.example.chatwifi_direct.chatMemory.Contacts;
-import com.example.chatwifi_direct.chatMemory.MemoryManagement;
+import com.example.chatwifi_direct.chatMemory.ContactsImpl;
 
 public class AddContactActivity extends AppCompatActivity {
     Button save;
@@ -23,21 +22,26 @@ public class AddContactActivity extends AppCompatActivity {
     TextView macView;
     String mac;
     String name;
-    MemoryManagement<Contact> memory;
+    Contacts contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
 
-        save = findViewById(R.id.button2);
-        picture = findViewById(R.id.imageView);
-        nameView = findViewById(R.id.editText4);
-        macView = findViewById(R.id.macAdressView2);
+        contacts = ContactsImpl.getContacsInstance(MainActivity.obj);
 
         Intent intent = getIntent();
         mac = intent.getStringExtra("mac");
         name = intent.getStringExtra("name");
+
+        contacts.setUpContact(mac);
+        save = findViewById(R.id.button2);
+        //picture = findViewById(R.id.imageView);
+        picture = findViewById(contacts.getPicture(mac));
+        nameView = findViewById(R.id.editText4);
+        macView = findViewById(R.id.macAdressView2);
+
         nameView.setText(name);
         macView.setText(mac);
 
@@ -45,10 +49,9 @@ public class AddContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 name = nameView.getText().toString().trim();
-                memory = Contacts.getContacsInstance(MainActivity.obj);
                 //memory = new Contacts(AddContactActivity.this);
-                Contact c = new Contact(name, mac);
-                memory.save(c);
+                //Contact c = new Contact(name, mac);
+                contacts.save(name, mac);
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Contact "+name+ " saved!",
                         Toast.LENGTH_SHORT);

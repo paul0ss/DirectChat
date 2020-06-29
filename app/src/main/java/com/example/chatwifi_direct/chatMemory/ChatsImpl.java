@@ -5,49 +5,82 @@ import android.content.Context;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class Chats {
+public class ChatsImpl implements Chats{
     //TODO: TreeSet: Elemente können nur ein mal vorkommen. Sind aber nach einem Kriterium sortiert(Datum der letzer Nachricht)
     //LinkedHashList: Elemente kommen nur ein mal vor.Sind aber in der Reihenfole, in der sie
     //eingefügt wurden
-    //LinkedHashSet<Chat> allChats = new LinkedHashSet<>();
-    Set<String> members; // every String = "Member1, Member2, ..."
-    //private HashMap<Set. Chat> allChats = new HashMap<Set. Chat>();
-    HashMap<Set, Chat> allChats;
-    private static Chats instance = null;
+    private Set<String> members; // every String = "Member1, Member2, ..."
+    private HashMap<Set, Chat> allChats;
+    private static ChatsImpl instance = null;
     private static Context ctx;
 
-    private Chats(){
+    private ChatsImpl(){
        allChats = new HashMap<Set, Chat>();
        members = new HashSet<>();
-        //restore();
+       restore();
     }
 
-    public static Chats getInstance(Context context){
-        if(Chats.instance == null){
-            instance = new Chats();
+    public static ChatsImpl getInstance(Context context){
+        ChatsImpl.ctx = context;
+        if(ChatsImpl.instance == null){
+            instance = new ChatsImpl();
         }
-        Chats.ctx = context;
-        return Chats.instance;
+        return ChatsImpl.instance;
     }
 
-    //TODO: adds Chat to allChats
-    //fügt einen Neuerstellten Chat zur Menge der Chats ein
-    public void addChat(Set set, Chat chat){
-        allChats.put(set, chat);
+    @Override
+    public void setChat(Set<String> members){
+        if(allChats.get(members) == null){
+            Chat chat = new Chat(ctx, members);
+            allChats.put(members, chat);
+        }
     }
 
-    public void restore(){
+    @Override
+    public void save(String sender, String message, Set<String> members){
+        Message m = new Message(sender, message);
+        Chat c = allChats.get(members);
+        c.save(m);
+    }
+
+    @Override
+    public void delete(String sender, String message, Set<String> members){
+
+    }
+
+    @Override
+    public String[] getSenders(Set<String> members){
+        Chat c = allChats.get(members);
+        ArrayList<String> senders = new ArrayList<>();
+        if(c.getMessages().isEmpty()){
+            return null;
+        }
+        for(Message m : c.getMessages()){
+            senders.add(m.getSender());
+        }
+        return senders.toArray(new String[0]);
+    }
+
+    @Override
+    public String[] getMessages(Set<String> members){
+        Chat c = allChats.get(members);
+        ArrayList<String> messagesText = new ArrayList<>();
+        for(Message m : c.getMessages()){
+            messagesText.add(m.getText());
+        }
+        return messagesText.toArray(new String[0]);
+    }
+
+
+    private void restore(){
         FilenameFilter filter = (dir, name) -> name.endsWith("@Chat.txt");
         File dir = ctx.getFilesDir();
         File[] chats = dir.listFiles(filter);
@@ -76,7 +109,8 @@ public class Chats {
                     String[] arr = unit.split(" ", 2);
                     sender = arr[0].substring(0, arr[0].length() - 1);
                     text = arr[1];
-                    chat.addMessage(new Message(sender, text));
+                    //chat.addMessage(new Message(sender, text));
+                    chat.getMessages().add(new Message(sender, text));
                 }
                 allChats.put(membersOfOneChat, chat);
                 membersOfOneChat = null;
@@ -95,10 +129,7 @@ public class Chats {
         }
     }
 
-    public Chat getChat(Set<String> s){
-        return allChats.get(s);
-    }
-
+    @Override
     public String[] getParticipents(){
         Set[] s = allChats.keySet().toArray(new Set[0]);
         ArrayList<String> str = new ArrayList<>();
@@ -110,12 +141,22 @@ public class Chats {
         return str.toArray(new String[0]);
     }
 
-    public String[] getLastMessage(){
+    @Override
+    public String[] getLastMessages(){
         ArrayList<String> lastMessages = new ArrayList<>();
         for(Chat c : allChats.values()){
             lastMessages.add(c.getLastMessage());
         }
         return lastMessages.toArray(new String[0]);
+    }
+
+    @Override
+    public Integer[] getPictures(){
+        ArrayList<Integer> list = new ArrayList<>();
+        for(Chat c : allChats.values()){
+            list.add(c.getImage());
+        }
+        return list.toArray(new Integer[0]);
     }
 
 }
