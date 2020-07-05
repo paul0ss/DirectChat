@@ -35,9 +35,7 @@ public class AddContactActivity extends AppCompatActivity {
         mac = intent.getStringExtra("mac");
         name = intent.getStringExtra("name");
 
-        contacts.setUpContact(mac);
         save = findViewById(R.id.button2);
-        //picture = findViewById(R.id.imageView);
         picture = findViewById(contacts.getPicture(mac));
         nameView = findViewById(R.id.editText4);
         macView = findViewById(R.id.macAdressView2);
@@ -49,8 +47,6 @@ public class AddContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 name = nameView.getText().toString().trim();
-                //memory = new Contacts(AddContactActivity.this);
-                //Contact c = new Contact(name, mac);
                 contacts.save(name, mac);
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Contact "+name+ " saved!",

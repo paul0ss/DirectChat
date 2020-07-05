@@ -12,31 +12,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class ContactsImpl implements Contacts{
-    //HashMap<Integer, Contact> contactsList = new HashMap<>(); //Map mit IDs und dazugehöriger Kontaktperson
-    HashMap<String, Contact> contactsList = new HashMap<>();
-    //TODO: HERE
-    // int maxID = 0; //die ID vom zuletzt abgespeicherter Kontaktperson
+    LinkedHashMap<String, Contact> contactsList = new LinkedHashMap<>();
     File contactFile;
     private static final String FILENAME = "contactsFile.txt";
-    //Integer imageID = R.drawable.ic_action_avatar;
     private static Context ctx;
     private static ContactsImpl instance;
 
-/*    private String createFileName(int id, String contactname){
-        return id + "." + contactname;
-    }*/
-
     private ContactsImpl(){
         restore();
-    }
-
-    public void setUpContact(String mac){
-        if(contactsList.get(mac) == null){
-            Contact c = new Contact("Empty", "mac");
-            contactsList.put(mac,c);
-        }
     }
 
     public static ContactsImpl getContacsInstance(Context context){
@@ -48,9 +34,6 @@ public class ContactsImpl implements Contacts{
     }
 
     private Contact[] getContactsArray(){
-        //Contact c = contactsList.get(0);
-        //TODO: MAMAYBE ERROR!!!
-        //Contact[] c = (Contact[]) contactsList.values().toArray();
         Contact[] c = contactsList.values().toArray(new Contact[0]);
         return c;
     }
@@ -81,7 +64,11 @@ public class ContactsImpl implements Contacts{
 
     @Override
     public Integer getPicture(String mac){
-        return contactsList.get(mac).getPicture();
+        if(!contactsList.containsKey(mac)){
+            return R.drawable.ic_action_avatar;
+        }else{
+            return contactsList.get(mac).getPicture();
+        }
     }
 
     @Override
@@ -94,11 +81,10 @@ public class ContactsImpl implements Contacts{
     }
 
     private void restore(){
-        //TODO: HERE!!!
-        //int id = maxID;
         contactFile = new File(ctx.getFilesDir(), FILENAME);
         FileInputStream fis = null;
         try {
+            contactFile.createNewFile();
             fis = new FileInputStream(contactFile);
             String contactString;
             InputStreamReader isr = new InputStreamReader(fis);
@@ -110,9 +96,6 @@ public class ContactsImpl implements Contacts{
                 name = contactParts[0];
                 mac = contactParts[1].trim();
                 contactsList.put(mac, new Contact(name, mac));
-                //TODO: HERE!!!
-                //maxID++;
-                //contactsList.put(id, new Contact(contactString, "fwieuf"));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -129,18 +112,12 @@ public class ContactsImpl implements Contacts{
 
     @Override
     public void save(String name,  String mac) { //TODO: die vorhandene Kontakte werden in dem File nicht überschrieben
-        //int id = maxID++;
         Contact contact = new Contact(name, mac);
-        //TODO HERE!!!
-        //maxID = maxID + 1;
-        //TODO: HERE!!!
-        //contactsList.put(maxID, contact);
         contactsList.put(mac, contact);
         contactFile = new File(ctx.getFilesDir(), FILENAME);
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(contactFile, true);
-            //fos = ctx.openFileOutput(FILENAME, ctx.MODE_PRIVATE);
             byte[] str = contact.toString().getBytes();
             fos.write(str);
         } catch (IOException e) {

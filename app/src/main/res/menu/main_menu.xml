@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_chats"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_name"
+
+        android:title="Chats">
+    </item>
+    <item
+        android:id="@+id/action_peers"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_peers"
+
+        android:title="Peers">
+    </item>
+    <item
+        android:id="@+id/action_contacts"
+        android:icon="@drawable/ic_action_contacts"
+        android:title="Contacts"
+        >
+    </item>
+</menu>

@@ -33,30 +33,9 @@ class Chat{
         return name = name + "@Chat" + ".txt";
     }
 
-/*    public void addMessage(Message msg){
-        messages.add(msg);
-    }*/
-
-/*    public ArrayList<String> getMessages(){
-        ArrayList<String> messages = new ArrayList<>();
-        for(Message m : this.messages){
-            messages.add(m.getText());
-        }
-        return messages;
-    }*/
-
     protected ArrayList<Message> getMessages(){
         return this.messages;
     }
-
-
-/*    public ArrayList<String> getSenders(){
-        ArrayList<String> senders = new ArrayList<>();
-        for(Message m : this.messages){
-            senders.add(m.getSender());
-        }
-        return senders;
-    }*/
 
     protected String getLastMessage(){
         if(messages.size() == 0){
@@ -66,29 +45,6 @@ class Chat{
         }
     }
 
-/*    private void writeMembersToFile(File file, Set<String> members){
-        String str = "Chatmembers: ";
-        for(String s : members){
-            str = str + s + " ";
-        }
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file, true);
-            byte[] string = str.getBytes();
-            fos.write(string);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if(fos != null){
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }*/
 
     protected Integer getImage(){
         return imageID;
@@ -99,8 +55,12 @@ class Chat{
         this.members = members;
         this.context = context;
         chatLog = new File(context.getFilesDir(), createFilename(members));
+        try {
+            chatLog.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
 
     protected void save(Message message) {
         messages.add(message);
@@ -122,7 +82,6 @@ class Chat{
             }
         }
     }
-
 
     protected void delete(Message message) {
         messages.remove(message);

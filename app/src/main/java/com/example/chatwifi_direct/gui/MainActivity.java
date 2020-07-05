@@ -62,19 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
         contacts = ContactsImpl.getContacsInstance(this);
         chats = ChatsImpl.getInstance(this);
-/*        if(restoreTime == 0){
-            contacts.restore();
-            chats.restore();
-            restoreTime++;
-        }*/
+
         participents = chats.getParticipents();
         lastMessages = chats.getLastMessages();
 
-/*        System.out.println("--------------------------------------------");
-        if(participents.length != 0){
-            System.out.println("--------------------------------------------");
-            System.out.println(participents[0]);
-        }*/
         if(participents.length != 0 &&  lastMessages.length != 0) {
             CustomListAdapter adapter = new CustomListAdapter(this, participents, lastMessages, chats.getPictures());
             listView = (ListView) findViewById(R.id.listviewID);
@@ -95,28 +86,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_chats:
-                //addSomething();
-                return true;
-            case R.id.action_peers:
-                //startSettings();
-                return true;
-            case R.id.action_contacts:
-                return true;
-            default:
-                return false;
-        }
-    }*/
 
 }

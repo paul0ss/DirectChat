@@ -15,8 +15,6 @@ import java.util.Set;
 
 public class ChatsImpl implements Chats{
     //TODO: TreeSet: Elemente können nur ein mal vorkommen. Sind aber nach einem Kriterium sortiert(Datum der letzer Nachricht)
-    //LinkedHashList: Elemente kommen nur ein mal vor.Sind aber in der Reihenfole, in der sie
-    //eingefügt wurden
     private Set<String> members; // every String = "Member1, Member2, ..."
     private HashMap<Set, Chat> allChats;
     private static ChatsImpl instance = null;
@@ -46,6 +44,10 @@ public class ChatsImpl implements Chats{
 
     @Override
     public void save(String sender, String message, Set<String> members){
+        if(allChats.get(members) == null){
+            Chat chat = new Chat(ctx, members);
+            allChats.put(members, chat);
+        }
         Message m = new Message(sender, message);
         Chat c = allChats.get(members);
         c.save(m);
@@ -58,6 +60,10 @@ public class ChatsImpl implements Chats{
 
     @Override
     public String[] getSenders(Set<String> members){
+        if(allChats.get(members) == null){
+            Chat chat = new Chat(ctx, members);
+            allChats.put(members, chat);
+        }
         Chat c = allChats.get(members);
         ArrayList<String> senders = new ArrayList<>();
         if(c.getMessages().isEmpty()){
@@ -71,6 +77,10 @@ public class ChatsImpl implements Chats{
 
     @Override
     public String[] getMessages(Set<String> members){
+        if(allChats.get(members) == null){
+            Chat chat = new Chat(ctx, members);
+            allChats.put(members, chat);
+        }
         Chat c = allChats.get(members);
         ArrayList<String> messagesText = new ArrayList<>();
         for(Message m : c.getMessages()){
@@ -90,6 +100,7 @@ public class ChatsImpl implements Chats{
         String text = "";
         for(File f: chats){
             Set<String> membersOfOneChat = new HashSet<>();
+
             //get members from Filename
             filename = f.getName();
             members = filename.substring(0, filename.length() - 9);
@@ -98,6 +109,7 @@ public class ChatsImpl implements Chats{
                 membersOfOneChat.add(s);
             }
             Chat chat = new Chat(ctx, membersOfOneChat);
+
             //restore Messages
             FileInputStream fis = null;
             try {
@@ -109,7 +121,6 @@ public class ChatsImpl implements Chats{
                     String[] arr = unit.split(" ", 2);
                     sender = arr[0].substring(0, arr[0].length() - 1);
                     text = arr[1];
-                    //chat.addMessage(new Message(sender, text));
                     chat.getMessages().add(new Message(sender, text));
                 }
                 allChats.put(membersOfOneChat, chat);
